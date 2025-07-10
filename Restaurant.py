@@ -253,11 +253,11 @@ def order_from_menu(menu_id):
 def menus_menu():
     clear()
     try:
-        selection = int(input("Que deseas hacer? \n1. Crear menu \n2. Borrar Menu \n3. Ver menus disponibles \n0. Para volver\n\n"))
-        if not(0 <= selection <= 3):
+        selection = int(input("Que deseas hacer? \n1. Crear menu \n2. Borrar Menu \n3. Ver menus disponibles \n4. Editar Menus \n0. Para volver\n\n"))
+        if not(0 <= selection <= 4):
             raise Exception()
     except:
-        input("\nEl valor debe ser un entero entre el 0 y el 3, intentalo de nuevo, Enter para continuar\n\n")
+        input("\nEl valor debe ser un entero entre el 0 y el 4, intentalo de nuevo, Enter para continuar\n\n")
         menus_menu()
         return
     
@@ -268,7 +268,7 @@ def menus_menu():
         case 1:
             create_menu()
         case 2:
-            pass
+            delete_menu()
         case 3:
             clear()
             if MENUS == []:
@@ -281,17 +281,44 @@ def menus_menu():
             input("\n\nPresiona Enter para continuar...\n")
             menus_menu()
             return
+        case 4:
+            update_menu()
             
+def update_menu():
+    print("acaben con mi vida :D")
+def delete_menu():
+    clear()
+    name = input("Inserta el nombre del menu que quieres eliminar: ")
+    new_menus = []
+    try:
+        menu = next((menu for menu in MENUS if menu['name'] == name), None)
+        if not menu:
+            raise NameError("Menu no encontrado, intenta de nuevo...")
+        MENUS.remove(menu)
+        with open("menus.json", "r", encoding="utf-8") as file:
+            try:
+                new_menus = json.load(file)
+            except json.JSONDecodeError:
+                pass # Si el archivo está vacío o corrupto, no hacemos nada
+        with open("menus.json", "w", encoding="utf-8") as file:
+            # Filtrar los menús que no coinciden con el nombre a eliminar
+            new_menus = [m for m in new_menus if m['name'] != name]
+            json.dump(new_menus, file, indent=4, ensure_ascii=False)
+        input(f"\nMenu '{name}' eliminado exitosamente. Enter para conitnuar\n")
+        menus_menu()
+    except NameError as e:
+        input(f"{e} Enter para continuar\n")
+        menus_menu()
             
 def create_menu():
     clear()
     try:
         menu_name = input("Inserta el nombre del nuevo menu: ")
-        if not(0 < len(menu_name) <= 20):
-            raise NameError("\nLongitud de nombre invalida, empieza de nuevo...")
+        if not(0 < len(menu_name) <= 20) or any(menu['name'] == menu_name for menu in MENUS):
+            raise NameError("\nLongitud de nombre invalida o el nombre ya está en uso, empieza de nuevo...")
     except NameError as e:
         input(f"{e} Enter para continuar\n")
-        create_menu()
+        menus_menu()
         return
     
     print("\nAhora, añade los prouctos.\n")
@@ -350,14 +377,36 @@ def create_menu():
     
 def save_menu(name, products):
     try:
+        # 1. Prepara una lista para guardar todos los menús.
+        all_menus = []
+        
+        # 2. Intenta leer el archivo JSON existente.
+        try:
+            with open("menus.json", "r", encoding="utf-8") as file:
+                # Si el archivo no está vacío, carga su contenido (la lista de menús).
+                if os.path.getsize("menus.json") > 0:
+                    all_menus = json.load(file)
+        except FileNotFoundError:
+            # Si el archivo no existe, no hay problema. Se creará más adelante.
+            pass
+        except json.JSONDecodeError:
+            # Si el archivo está corrupto o vacío, empezamos con una lista vacía.
+            pass
+
+        # 3. Crea el nuevo menú como un diccionario.
+        new_menu = {
+            "name": name,
+            "products": products
+        }
+        
+        # 4. Añade el nuevo menú a la lista que leímos (o a la lista vacía si el archivo no existía).
+        all_menus.append(new_menu)
+        
+        # 5. Escribe la lista completa y actualizada de vuelta en el archivo.
+        #    El modo "w" borrará el contenido anterior y escribirá el nuevo.
         with open("menus.json", "w", encoding="utf-8") as file:
-            new_json = json.load(file)
-            new_menu = {
-                "name": name,
-                "products": products
-            }
-            new_json.append(new_menu)
-            json.dump(new_json, file, indent=4, ensure_ascii=False)    
+            json.dump(all_menus, file, indent=4, ensure_ascii=False)
+            
         print("\nMenu guardado exitosamente\n")
         main_menu()
     except FileNotFoundError:
@@ -374,8 +423,10 @@ def load_menus():
     try:
         with open('menus.json', 'r', encoding='utf-8') as file:
             if os.path.getsize('menus.json') == 0:
-                 with open('default.json', 'r', encoding='utf-8') as default_file:
+                with open('default.json', 'r', encoding='utf-8') as default_file:
                     data = json.load(default_file)
+                    with open('menus.json', 'w', encoding='utf-8') as new_file:
+                        json.dump(data, new_file, indent=4, ensure_ascii=False)
             else:
                 data = json.load(file)
             for menu in data:

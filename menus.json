@@ -1,0 +1,39 @@
+[
+    {
+        "name": "Menu 1",
+        "products": [
+            {
+                "type": "Drink",
+                "name": "Bebida",
+                "price": 3000.0,
+                "size": "grande",
+                "hasSugar": true
+            },
+            {
+                "type": "Dessert",
+                "name": "Gelatina",
+                "price": 4000.0,
+                "dessert_type": "Gelatina"
+            }
+        ]
+    },
+    {
+        "name": "Menu 2",
+        "products": [
+            {
+                "type": "Dessert",
+                "name": "Gelatina de fresa",
+                "price": 4000.0,
+                "dessert_type": "gelatina"
+            },
+            {
+                "type": "MainCourse",
+                "name": "Arroz",
+                "price": 2000.0,
+                "flour": "arroz",
+                "protein": "Ninguna",
+                "salad": "Ninguna"
+            }
+        ]
+    }
+]
