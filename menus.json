@@ -1,6 +1,6 @@
 [
     {
-        "name": "Menu 1",
+        "name": "Menu bien sexual",
         "products": [
             {
                 "type": "Drink",
@@ -10,29 +10,38 @@
                 "hasSugar": true
             },
             {
-                "type": "Dessert",
-                "name": "Gelatina",
-                "price": 4000.0,
-                "dessert_type": "Gelatina"
+                "type": "MainCourse",
+                "name": "Pollo con arroz",
+                "price": 18000.0,
+                "flour": "Arroz",
+                "protein": "Pollo",
+                "salad": "Ninguna"
             }
         ]
     },
     {
-        "name": "Menu 2",
+        "name": "Juanito Alimaña",
         "products": [
             {
-                "type": "Dessert",
-                "name": "Gelatina de fresa",
-                "price": 4000.0,
-                "dessert_type": "gelatina"
+                "type": "Drink",
+                "name": "Pedro liquido",
+                "price": 3500.0,
+                "size": "Gigantizimo",
+                "hasSugar": true
             },
             {
                 "type": "MainCourse",
-                "name": "Arroz",
-                "price": 2000.0,
-                "flour": "arroz",
-                "protein": "Ninguna",
-                "salad": "Ninguna"
+                "name": "Pedro solido",
+                "price": 30000.0,
+                "flour": "PEdro",
+                "protein": "PEDRO",
+                "salad": "pedro"
+            },
+            {
+                "type": "Dessert",
+                "name": "Menu 2",
+                "price": 345.0,
+                "dessert_type": "pastel"
             }
         ]
     }
