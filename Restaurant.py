@@ -4,6 +4,8 @@ import os
 from queue import Queue
 from collections import namedtuple
 
+ProductSummary = namedtuple('ProductSummary', ['name', 'price', 'type'])
+
 clear = lambda : os.system('cls')
 MENUS = []
 orders_queue = Queue()
